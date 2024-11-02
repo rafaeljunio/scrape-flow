@@ -48,6 +48,8 @@ export const DesktopSidebar = () => {
         <Logo />
       </div>
 
+      <div className="p-2">TODO CREDITS</div>
+
       <div className="flex flex-col p-2">
         {routes.map((route) => (
           <Link
