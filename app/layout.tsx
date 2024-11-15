@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { AppProviders } from '@/components/providers/app-providers'
+import ScreenSizeIndicator from '@/lib/screen-size-indicator'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ScreenSizeIndicator env={process.env.NODE_ENV} />
         <AppProviders>{children}</AppProviders>
       </body>
     </html>
