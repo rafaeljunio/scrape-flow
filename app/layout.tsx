@@ -1,5 +1,6 @@
 import './globals.css'
 
+import { ClerkProvider } from '@clerk/nextjs'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
@@ -19,11 +20,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ScreenSizeIndicator env={process.env.NODE_ENV} />
-        <AppProviders>{children}</AppProviders>
-      </body>
-    </html>
+    <ClerkProvider
+      afterSignOutUrl={'/sign-in'}
+      appearance={{
+        elements: {
+          formButtonPrimary:
+            'bg-primary hover:bg-primary/90 text-sm !shadow-none',
+        },
+      }}
+    >
+      <html lang="en">
+        <body className={inter.className}>
+          <ScreenSizeIndicator env={process.env.NODE_ENV} />
+          <AppProviders>{children}</AppProviders>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
