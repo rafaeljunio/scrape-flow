@@ -6,11 +6,14 @@
     "dev": "next dev -p ${PORT=36100}",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@clerk/nextjs": "5.3.2",
     "@hookform/resolvers": "^3.9.1",
+    "@prisma/client": "^5.22.0",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -66,6 +69,7 @@
     "@types/react-dom": "^18",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "postcss": "^8",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
