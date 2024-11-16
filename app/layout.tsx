@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import AppProviders from '@/components/providers/app-providers'
+import { Toaster } from '@/components/ui/sonner'
 import ScreenSizeIndicator from '@/lib/screen-size-indicator'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -34,6 +35,7 @@ export default function RootLayout({
           <ScreenSizeIndicator env={process.env.NODE_ENV} />
           <AppProviders>{children}</AppProviders>
         </body>
+        <Toaster richColors />
       </html>
     </ClerkProvider>
   )
