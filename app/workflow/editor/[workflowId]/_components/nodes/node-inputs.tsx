@@ -5,6 +5,7 @@ import React, { type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import type { TaskParam } from '@/types/task'
 
+import { ColorForHandle } from './common'
 import { NodeParamField } from './node-param-field'
 
 export const NodeInputs = ({ children }: { children: ReactNode }) => {
@@ -28,6 +29,7 @@ export const NodeInput = ({
           position={Position.Left}
           className={cn(
             '!bg-muted-foreground !border-2 !border-background !-left-2 !w-4 !h-4',
+            ColorForHandle[input.type],
           )}
         />
       )}

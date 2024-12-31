@@ -7,6 +7,7 @@ import { useCallback } from 'react'
 import type { AppNode } from '@/types/app-node'
 import { type TaskParam, TaskParamType } from '@/types/task'
 
+import { BrowserInstanceParam } from './param/browser-instance-param'
 import { StringParam } from './param/string-param'
 
 export const NodeParamField = ({
@@ -38,6 +39,14 @@ export const NodeParamField = ({
         <StringParam
           param={param}
           value={value}
+          updateNodeParamValue={updateNodeParamValue}
+        />
+      )
+    case TaskParamType.BROWSER_INSTANCE:
+      return (
+        <BrowserInstanceParam
+          param={param}
+          value={''}
           updateNodeParamValue={updateNodeParamValue}
         />
       )
