@@ -18,6 +18,7 @@ import { useCallback, useEffect } from 'react'
 
 import { DeletableEdge } from '@/app/workflow/_components/edges/deletable-edge'
 import { CreateFlowNode } from '@/lib/workflow/create-flow-node'
+import { TaskRegistry } from '@/lib/workflow/task/registry'
 import type { AppNode } from '@/types/app-node'
 import type { TaskType } from '@/types/task'
 
@@ -101,6 +102,36 @@ export const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
     [nodes, setEdges, updateNodeData],
   )
 
+  const isValidConnection = useCallback(
+    (connection: Edge | Connection) => {
+      // No self-connection allowed
+      if (connection.source === connection.target) {
+        return false
+      }
+
+      // Same taskParam type connection
+      const source = nodes.find((node) => node.id === connection.source)
+      const target = nodes.find((node) => node.id === connection.target)
+      if (!source || !target) {
+        console.log('Invalid connection: source or target node not found')
+        return false
+      }
+
+      const sourceTask = TaskRegistry[source.data.type]
+      const targetTask = TaskRegistry[target.data.type]
+
+      const output = sourceTask.outputs.find(
+        (o) => o.name === connection.sourceHandle,
+      )
+
+      const input = targetTask.inputs.find(
+        (o) => o.name === connection.targetHandle,
+      )
+      return true
+    },
+    [nodes],
+  )
+
   return (
     <main className="h-full w-full">
       <ReactFlow
@@ -117,6 +148,7 @@ export const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
         onDragOver={onDragOver}
         onDrop={onDrop}
         onConnect={onConnect}
+        isValidConnection={isValidConnection}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />

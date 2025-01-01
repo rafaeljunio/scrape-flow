@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useEdges } from '@xyflow/react'
 import React, { type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -19,12 +19,19 @@ export const NodeInput = ({
   input: TaskParam
   nodeId: string
 }) => {
+  const edges = useEdges()
+  const isConnected = edges.some(
+    (edge) => edge.target === nodeId && edge.targetHandle === input.name,
+  )
+
   return (
     <div className="flex justify-start relative p-3 bg-secondary w-full">
-      <NodeParamField param={input} nodeId={nodeId} />
+      <NodeParamField param={input} nodeId={nodeId} disabled={isConnected} />
+
       {!input.hideHandle && (
         <Handle
           id={input.name}
+          isConnectable={!isConnected}
           type="target"
           position={Position.Left}
           className={cn(
