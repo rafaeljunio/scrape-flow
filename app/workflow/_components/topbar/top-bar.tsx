@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { TooltipWrapper } from '@/components/tooltip-wrapper'
 import { Button } from '@/components/ui/button'
 
+import { ExecuteBtn } from './execute-btn'
 import { SaveBtn } from './save-btn'
 
 type Props = {
@@ -38,6 +39,7 @@ export const TopBar = ({ title, subtitle, workflowId }: Props) => {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
+        <ExecuteBtn workflowId={workflowId} />
         <SaveBtn workflowId={workflowId} />
       </div>
     </header>
