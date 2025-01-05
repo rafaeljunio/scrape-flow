@@ -1,4 +1,4 @@
-import { type Edge, getIncomers } from '@xyflow/react'
+import type { Edge } from '@xyflow/react'
 
 import type { AppNode, AppNodeMissingInputs } from '@/types/app-node'
 import type {
@@ -18,7 +18,7 @@ type FlowToExecutionPlanType = {
   executionPlan?: WorkflowExecutionPlan
   error?: {
     type: FlowToExecutionPlanValidationError
-    invalidElements?: AppNodeMissingInputs
+    invalidElements?: AppNodeMissingInputs[]
   }
 }
 
@@ -43,7 +43,10 @@ export function FlowToExecutionPlan(
 
   const invalidInputs = getInvalidInputs(entryPoint, edges, planned)
   if (invalidInputs.length > 0) {
-    inputsWithErrors.push({})
+    inputsWithErrors.push({
+      nodeId: entryPoint.id,
+      inputs: invalidInputs,
+    })
   }
 
   const executionPlan: WorkflowExecutionPlan = [
@@ -73,7 +76,10 @@ export function FlowToExecutionPlan(
         const incomers = getIncomers(currentNode, nodes, edges)
         if (incomers.every((incomer) => planned.has(incomer.id))) {
           console.error('invalid inputs', currentNode.id, invalidInputs)
-          throw new Error('TODO: HANDLE ERROR 1')
+          inputsWithErrors.push({
+            nodeId: currentNode.id,
+            inputs: invalidInputs,
+          })
         }
         continue
       }
@@ -84,6 +90,15 @@ export function FlowToExecutionPlan(
       planned.add(node.id)
     }
     executionPlan.push(nextPhase)
+  }
+
+  if (inputsWithErrors.length > 0) {
+    return {
+      error: {
+        type: FlowToExecutionPlanValidationError.INVALID_INPUTS,
+        invalidElements: inputsWithErrors,
+      },
+    }
   }
 
   return { executionPlan }
@@ -126,4 +141,20 @@ function getInvalidInputs(node: AppNode, edges: Edge[], planned: Set<string>) {
   }
 
   return invalidInputs
+}
+
+function getIncomers(node: AppNode, nodes: AppNode[], edges: Edge[]) {
+  if (!node.id) {
+    return []
+  }
+
+  const incommersIds = new Set()
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  edges.forEach((edge) => {
+    if (edge.target === node.id) {
+      incommersIds.add(edge.source)
+    }
+  })
+
+  return nodes.filter((n) => incommersIds.has(n.id))
 }
