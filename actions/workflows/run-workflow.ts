@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 
 import prisma from '@/lib/prisma'
+import { ExecuteWorkflow } from '@/lib/workflow/execute-workflow'
 import { FlowToExecutionPlan } from '@/lib/workflow/execution-plan'
 import { TaskRegistry } from '@/lib/workflow/task/registry'
 import {
@@ -89,5 +90,6 @@ export async function RunWorkflow(form: {
     throw new Error('workflow execution not created')
   }
 
-  redirect(`/workflows/runs/${workflowId}/${execution.id}`)
+  ExecuteWorkflow(execution.id)
+  redirect(`/workflow/runs/${workflowId}/${execution.id}`)
 }

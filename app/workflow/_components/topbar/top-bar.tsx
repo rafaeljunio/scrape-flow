@@ -13,9 +13,15 @@ type Props = {
   title: string
   subtitle?: string
   workflowId: string
+  hideButtons?: boolean
 }
 
-export const TopBar = ({ title, subtitle, workflowId }: Props) => {
+export const TopBar = ({
+  title,
+  subtitle,
+  workflowId,
+  hideButtons = false,
+}: Props) => {
   const router = useRouter()
 
   return (
@@ -39,8 +45,12 @@ export const TopBar = ({ title, subtitle, workflowId }: Props) => {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
-        <ExecuteBtn workflowId={workflowId} />
-        <SaveBtn workflowId={workflowId} />
+        {hideButtons === false && (
+          <>
+            <ExecuteBtn workflowId={workflowId} />
+            <SaveBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   )
